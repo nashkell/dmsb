@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Dungeon Master Sound Board</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css?family=Cinzel+Decorative:400,700,900" rel="stylesheet">
+</head>
+<body>
+  <div class="title">
+    <h1>
+      Dungeon Master Sound Board
+    </h1>
+    <h3>
+      Press the corresponding key to play sound.
+    </h3>
+  </div>
+  
+  <div class="keys">
+    <div data-key="65" class="key">
+      <kbd>A</kbd>
+      <span class="sound">player hit</span>
+    </div>
+    <div data-key="83" class="key">
+      <kbd>S</kbd>
+      <span class="sound">player crit</span>
+    </div>
+    <div data-key="68" class="key">
+      <kbd>D</kbd>
+      <span class="sound">player miss</span>
+    </div>
+    <div data-key="70" class="key">
+      <kbd>F</kbd>
+      <span class="sound">female ouch</span>
+    </div>
+    <div data-key="71" class="key">
+      <kbd>G</kbd>
+      <span class="sound">male ouch</span>
+    </div>
+    <div data-key="72" class="key">
+      <kbd>H</kbd>
+      <span class="sound">firebolt</span>
+    </div>
+    <div data-key="74" class="key">
+      <kbd>J</kbd>
+      <span class="sound">cast spell</span>
+    </div>
+    <div data-key="75" class="key">
+      <kbd>K</kbd>
+      <span class="sound">fall down</span>
+    </div>
+    <div data-key="76" class="key">
+      <kbd>L</kbd>
+      <span class="sound">big splat</span>
+    </div>
+  </div>
+
+  <div class="keys">
+      <div data-key="90" class="key">
+        <kbd>Z</kbd>
+        <span class="sound">bug attack</span>
+      </div>
+      <div data-key="88" class="key">
+        <kbd>X</kbd>
+        <span class="sound">bug squirt</span>
+      </div>
+      <div data-key="67" class="key">
+        <kbd>C</kbd>
+        <span class="sound">bug hurt</span>
+      </div>
+      <div data-key="86" class="key">
+        <kbd>V</kbd>
+        <span class="sound">bug die</span>
+      </div>
+      <div data-key="66" class="key">
+        <kbd>B</kbd>
+        <span class="sound">troll attack</span>
+      </div>
+      <div data-key="78" class="key">
+        <kbd>N</kbd>
+        <span class="sound">troll damage</span>
+      </div>
+      <div data-key="77" class="key">
+        <kbd>M</kbd>
+        <span class="sound">troll die</span>
+      </div>
+    </div>
+
+  <audio data-key="65" src="sounds/playerHit.wav"></audio>
+  <audio data-key="83" src="sounds/playerCrit.wav"></audio>
+  <audio data-key="68" src="sounds/playerMiss.wav"></audio>
+  <audio data-key="70" src="sounds/fouch.wav"></audio>
+  <audio data-key="71" src="sounds/mOuch.wav"></audio>
+  <audio data-key="72" src="sounds/fireBolt.wav"></audio>
+  <audio data-key="74" src="sounds/castSpell.wav"></audio>
+  <audio data-key="75" src="sounds/fallDown.wav"></audio>
+  <audio data-key="76" src="sounds/splat.wav"></audio>
+
+  <audio data-key="90" src="sounds/bugAttack.wav"></audio>
+  <audio data-key="88" src="sounds/squirt.wav"></audio>
+  <audio data-key="67" src="sounds/bugHurt.wav"></audio>
+  <audio data-key="86" src="sounds/bugDie.wav"></audio>
+  <audio data-key="66" src="sounds/ogreAttack.wav"></audio>
+  <audio data-key="78" src="sounds/ogreDamage.wav"></audio>
+  <audio data-key="77" src="sounds/ogreDie.wav"></audio>
+
+<script>
+function playSound(e) {
+  //console.log(e.keycode);//logs keycode of key pressed
+
+  const audio = document.querySelector(
+    //look for audio element with a 'data-key' data attribute
+    `audio[data-key="${e.keyCode}"]`
+  );
+  const key = document.querySelector(
+    `.key[data-key="${e.keyCode}"]`  
+  );
+    /*[data-key=65] targets specific data attribute, but we can use ES6 standard ${e.keyCode} to target 'event' variable passed into function 
+    make sure that data-key value is in " "
+    */
+    if (!audio) return;//stops the function
+    audio.currentTime = 0; //rewind audio to the start - allows continuous pressing of key
+    audio.play();
+    key.classList.toggle('playing');//playing class is what toggles the 'highlight' on and off
+    
+}
+
+function removeTransition(e) {
+  if (e.propertyName !== 'transform') return;//skip if its not a transform
+  this.classList.remove('playing');
+}
+
+const keys = document.querySelectorAll('.key');
+keys.forEach(key => key.addEventListener('transitionend', removeTransition));
+//listen for 'keydown' event in window
+//pass event heard into function to play sound tied to data attribute of key pressed
+window.addEventListener('keydown', playSound);
+</script>
+
+
+</body>
+</html>
